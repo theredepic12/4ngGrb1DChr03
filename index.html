@@ -17,7 +17,6 @@
       align-items: center;
     }
 
-    /* Wrapper that scales the game to the parent container */
     #gameWrapper {
       width: 100%;
       height: 100%;
@@ -26,18 +25,17 @@
       align-items: center;
     }
 
-    /* Game scales to fit parent but preserves aspect ratio */
     #gameDiv {
-      position: relative;
       width: 100%;
       height: 100%;
-      max-width: 100%;
-      max-height: 100%;
+      position: relative;
     }
 
     #playn-root {
       width: 100%;
       height: 100%;
+      position: relative;
+      transform-origin: top left;
     }
 
     #loading {
@@ -47,7 +45,6 @@
       transform: translate(-50%, -50%);
     }
   </style>
-
   <script src="fowl/fowl.nocache.js"></script>
 </head>
 <body>
@@ -60,6 +57,34 @@
       </div>
     </div>
   </div>
+
+  <script>
+    function scaleGame() {
+      const wrapper = document.getElementById('gameDiv');
+      const game = document.getElementById('playn-root');
+      if (!wrapper || !game) return;
+
+      // get wrapper size
+      const w = wrapper.clientWidth;
+      const h = wrapper.clientHeight;
+
+      // original game size (Angry Birds Chrome default)
+      const origW = 960;
+      const origH = 540;
+
+      // calculate scale to fit
+      const scale = Math.min(w / origW, h / origH);
+
+      // apply scale
+      game.style.transform = `scale(${scale})`;
+      game.style.width = `${origW}px`;
+      game.style.height = `${origH}px`;
+    }
+
+    // run scale after load and on resize
+    window.addEventListener('resize', scaleGame);
+    setTimeout(scaleGame, 500); // give fowl.nocache.js time to initialize
+    setInterval(scaleGame, 200); // ensures it stays scaled correctly in Google Sites
+  </script>
 </body>
 </html>
-
